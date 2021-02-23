@@ -111,141 +111,107 @@ const businesses = [
   }
 ];
 
-//PRACTICE: BIG SPENDERS
-
-// Array to contain all the big spenders
-const bigSpenders = businesses.filter(business => {
-  let highRoller = false
-
-  if (business.orders >= 9000) {
-      highRoller = true
+const manufacturingBusinesses = businesses.filter(business => {
+  let manufacturing = false;
+  if (business.companyIndustry === 'Manufacturing') {
+    manufacturing = true;
   }
-
-  return highRoller
-
+  return manufacturing;
 });
 
-// const agent = [{
-//   "fullName": "Kaylee Gutkowski",
-//   "company": "Highnix",
-//   "phoneNumber": "235.266.6278"
-// }];
+outEl.innerHTML = `<h1>Manufacturing Business</h1>`
 
-// function printToDom(divId, textToPrint) {
-//   const selectedDiv = document.querySelector(divId);
-//   selectedDiv.innerHTML = textToPrint;
-// };
+manufacturingBusinesses.forEach(manufacturingBusiness => {
+  outEl.innerHTML += `<h2>${manufacturingBusiness.companyName}</h2>
+                      <section>
+                        ${manufacturingBusiness.addressFullStreet}
+                      </section>
+                      <section>
+                        ${manufacturingBusiness.addressCity}, ${manufacturingBusiness.addressStateCode} ${manufacturingBusiness.addressZipCode}
+                      </section>`
+  outEl.innerHTML += `<hr/>`
+});
 
-// const outEl = document.querySelector("#output")
-// outEl.innerHTML = "<h1>Active Businesses</h1>"
+outEl.innerHTML += `<h1>Purchasing Agents</h1>`;
 
-// businesses.forEach(business => {
-//   outEl.innerHTML += `
-//     <h2>${business.companyName}</h2>
-//     <section>
-//       ${business.addressFullStreet}
-//     </section>
-//     <section>
-//       ${business[addressCity, addressStateCode, addressZipCode]}
-//     </section>
-//   `
-//   outEl.innerHTML += "<hr/>"
-// });
+const agents = businesses.map(business => {
+  const fullName = `${business.purchasingAgent.nameFirst} ${business.purchasingAgent.nameLast}`;
+  const company = `${business.companyName}`;
+  const phoneNumber = `${business.phoneWork}`;
+  const obj = {
+    fullName,
+    company,
+    phoneNumber,
+  }
+  return obj;
+});
 
-// // Array to contain all the New York businesses
-// const newYorkBusinesses = businesses.filter(business => {
-//   let inNewYork = false
+console.table(agents);
 
-//   if (business.addressStateCode === "NY") {
-//       inNewYork = true
-//   }
+agents.forEach(agent => {
+  outEl.innerHTML += `<h2>${agent.fullName}</h2>
+                      <h3>${agent.company}</h3>
+                      <h3>${agent.phoneNumber}</h3>`;
 
-//   return inNewYork
-// });
+  outEl.innerHTML += `<hr/>`;
+});
 
-// // Array to contain all the New York businesses
-// const manufacturingBusinesses = businesses.filter(business => {
-//   let inManufacturing = false
 
-//   if (business.companyIndustry === "Manufacturing") {
-//       inManufacturing = true
-//   }
+document
+    .querySelector("#companySearch")
+    .addEventListener("keypress", keyPressEvent => {
+        if (keyPressEvent.charCode === 13) {
+            const foundBusiness = businesses.find(
+                business =>
+                    business.companyName.includes(keyPressEvent.target.value)
+            );
 
-//   return inManufacturing
-// });
+            outEl.innerHTML = `
+                <h2>
+                ${foundBusiness.companyName}
+                </h2>
+                <section>
+                ${foundBusiness.addressFullStreet}
 
-// outEl.innerHTML += "<h1>Purchasing Agents</h1>";
+                </section>
+                <section>
+                ${foundBusiness.addressCity},
+                ${foundBusiness.addressStateCode}
+                ${foundBusiness.addressZipCode}
+                </section>
+            `;
+        }
+    });
 
-// /*
-//     Using map(), you extract the purchasing agent object
-//     from each business and store it in a new array
-// */
-// const agents = businesses.map(business => {
-//     return business.purchasingAgent
-// })
+document.querySelector('#companySearch').addEventListener('keypress', keyPressEvent => {
+  if (keyPressEvent.charCode === 13) {
+    const foundAgents = agents.find(business => {
+      business.fullName.includes(keyPressEvent.target.value);
+      outEl.innerHTML = `<h2>${foundAgents.fullName}</h2>
+                          <h3>${foundAgents.company}</h3>
+                          <h3>${foundAgents.phoneNumber}</h3>`
+    });
+  };
 
-// console.table(agents)
+  // PRACTICE: BIG SPENDERS
 
-// agents.forEach(agent => {
-//   outEl.innerHTML += `<h2>${agent.nameFirst} ${agent.nameLast} + ',' + ${agent.company} + ',' + ${agent.phoneNumber}</h2>`;
-//   outEl.innerHTML += "<hr/>";
-// });
+// Array to contain all the big spenders
 
-// document
-//     .querySelector("#companySearch")
-//     .addEventListener("keypress", keyPressEvent => {
-//         if (keyPressEvent.charCode === 13) {
-//             /* WHEN  USER PRESSES ENTER, FIND MATCHING BUSINESS */
-//             const foundPurchasingAgent = agents.find(
-//                 agent =>
-//                     (agent.firstName.includes(keyPressEvent.target.value) || agent.nameLast.includes(keyPressEvent.target.value))
-//             );
+const bigSpenders = businesses.filter(business => {
+  let nineThousand = false;
+  business.orders.forEach(order => {
+    if (order >= 9000) {
+      nineThousand = true;
+    }
+  });
+  return nineThousand;
+});
 
-//             outEl.innerHTML = `
-//                 <h2>
-//                 ${foundPurchasingAgent.fullName}
-//                 </h2>
-//             `;
-//         }
-//     });
-
-//     businesses.forEach(business => {
-//       /* CALCULATE ORDER SUMMARY */
-//       let totalOrders = 0
-//       business.orders.forEach(order => totalOrders += order)
-  
-  
-//       outEl.innerHTML += `
-//           <h2>
-//               ${business.companyName}
-//               ($${totalOrders})
-//           </h2>
-//           <section>
-//               ${business.addressFullStreet}
-//           </section>
-//           <section>
-//               ${business.addressCity},
-//               ${business.addressStateCode}
-//               ${business.addressZipCode}
-//           </section>
-//       `;
-//       outEl.innerHTML += "<hr/>";
-//   });
-
-//   /* CALCULATE ORDER SUMMARY */
-// let totalOrders = business.orders.reduce(
-//   (currentTotal, nextValue) => currentTotal += nextValue,
-//   0
-// );
-
-// const monthlyRainfall = [23, 13, 27, 20, 20, 31, 33, 26, 19, 12, 14, 12, 10]
-
-// const totalRainfall = monthlyRainfall.reduce()
-
-// console.log(totalRainfall);
-
-// const words = ["The", "quick", "brown", "fox", "jumped", "over", "the", "lazy", "dog"]
-
-// const sentence = words.reduce()
-
-// console.log(sentence)
+outEl.innerHTML = `<h1>Big Spenders</h1>`
+bigSpenders.forEach(bigSpender => {
+  outEl.innerHTML += `<h2>${bigSpender.companyName}</h2>
+                      <section>${bigSpender.addressFullStreet}</section>
+                      <section>
+                      ${bigSpender.addressCity}, ${bigSpender.addressStateCode} ${bigSpender.addressZipCode}
+                      </section>`
+})});
