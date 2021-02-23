@@ -9,7 +9,7 @@ outEl.innerHTML = '<h1>Planets in Our Solar System</h1>'
 
 planets.forEach(planet => {
   outEl.innerHTML += `
-    <h2>${planet.elemnt}</h2>
+    <h2>${planet.element}</h2>
   `
   outEl.innerHTML += '<hr/>'
 });
@@ -38,13 +38,13 @@ bigPlanet.forEach((planet) => {
     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes
 */
 const findPlanet = planets.filter(planet => {
-  let containsE = false;
+  let includesE = false;
 
   if (planet.includes('e')) {
-    containsE = true;
+    includesE = true;
   };
 
-  return containsE;
+  return includesE;
 });
 
 
